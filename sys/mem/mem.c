@@ -1,27 +1,31 @@
 #include "sys/mem/mem.h"
 
 #include <fcntl.h>
-#include <stdlib.h> // for malloc
 #include <stdio.h>  // for fprintf
+#include <stdlib.h> // for malloc
 
-int mem_init()
-{
+int mem_init() {
     // find memory size in config file
     FILE *cfg = fopen("config.cfg", "r");
     if (!cfg) {
-        fprintf(stderr, "Could not read config.cfg. Make sure that you are running from the correct directory...\n");
+        fprintf(stderr, "Could not read config.cfg. Make sure that you are "
+                        "running from the correct directory...\n");
         return -1;
     }
 
     char dummy_buf[256];
     fgets(dummy_buf, 256, cfg); // ignore one line...
-    fgets(dummy_buf, 256, cfg); // ignore one more line... we'll catch any errors next
+    fgets(dummy_buf, 256,
+          cfg); // ignore one more line... we'll catch any errors next
 
     int size;
     if (fscanf(cfg, "mem_size : %d", &size) != 1) {
         fprintf(stderr, "Error reading memory size\n");
         return -1;
     }
+
+    // NOTE: Expose memory size to the allocator
+    mem_size = size;
 
     if (fclose(cfg) == EOF) {
         fprintf(stderr, "Error closing config");

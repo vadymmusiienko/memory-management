@@ -15,6 +15,6 @@ int strlen(const char *str) {
 
 void memset(void *p, char byte, long size) {
     for (int i = 0; i < size; i++) {
-        p = byte;
+        ((char *)p)[i] = byte;
     }
 }

@@ -1,5 +1,5 @@
 CC = gcc
-FLAGS = -Og -g -Wall
+FLAGS = -Og -g -Wall -fno-builtin
 LIBFLAGS = -c
 INCLUDE = -I. -Iinclude
 
@@ -21,3 +21,10 @@ mm: $(UTILS) $(ALLOCS)
 
 clean:
 	rm -rf bin/*
+
+buddytest: buddyallocator
+	$(CC) $(FLAGS) $(INCLUDE) test/buddy_test.c bin/buddy_allocator.o \
+		util/spinlock.c sys/mem/mem.c -o bin/buddy_test
+
+test: buddytest
+	./bin/buddy_test
